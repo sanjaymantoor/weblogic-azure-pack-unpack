@@ -66,7 +66,7 @@ function create_resource_group()
 function create_postgresql_db_server()
 {
     echo "creating Postgresql DB Server ${DB_SERVER} in resource group ${RG_NAME}"
-    echo az postgres flexible-server create \ 
+    echo az postgres flexible-server create \
 							--resource-group ${RG_NAME} \
 						 	--name ${DB_SERVER} \
 						 	--location "${LOCATION}" \
@@ -76,7 +76,7 @@ function create_postgresql_db_server()
 						 	 --sku-name Standard_D2s_v3 \
 						 	 --public-access All
 						 	 
-	az postgres flexible-server create \ 
+	az postgres flexible-server create \
 							--resource-group ${RG_NAME} \
 						 	--name ${DB_SERVER} \
 						 	--location "${LOCATION}" \

@@ -95,8 +95,7 @@ function create_postgresql_db_server()
      exit 1
     fi
 
-	echo az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep ${DB_SERVER} | head -1| cut -f2 -d":"
-  	DB_PUBLIC_HOSTNAME=$(az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep ${DB_SERVER} | head -1| cut -f2 -d":")
+	DB_PUBLIC_HOSTNAME=$(echo $RESULTS|jq '.host'|sed 's/"//g')
     echo "DB_PUBLIC_HOSTNAME: $DB_PUBLIC_HOSTNAME"
 
 }

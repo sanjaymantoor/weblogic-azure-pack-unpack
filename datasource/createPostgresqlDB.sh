@@ -76,7 +76,7 @@ function create_postgresql_db_server()
 						 	 --sku-name Standard_D2s_v3 \
 						 	 --public-access All
 						 	 
-	az postgres flexible-server create \
+	RESULTS=$(az postgres flexible-server create \
 							--resource-group ${RG_NAME} \
 						 	--name ${DB_SERVER} \
 						 	--location "${LOCATION}" \
@@ -84,7 +84,10 @@ function create_postgresql_db_server()
 						 	--admin-user ${DB_USERNAME} \
 						 	--admin-password ${DB_PASSWD} \
 						 	 --sku-name Standard_D2s_v3 \
-						 	 --public-access All
+						 	 --public-access All)
+	ecgo "======================================================"
+	echo $RESULTS
+	ecgo "======================================================"
 
     if [ "$?" != 0 ];
     then
@@ -92,7 +95,8 @@ function create_postgresql_db_server()
      exit 1
     fi
 
-  	DB_PUBLIC_HOSTNAME=$(az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep pgsql12345 | head -1| cut -f2 -d":")
+	echo az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep ${DB_SERVER} | head -1| cut -f2 -d":"
+  	DB_PUBLIC_HOSTNAME=$(az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep ${DB_SERVER} | head -1| cut -f2 -d":")
     echo "DB_PUBLIC_HOSTNAME: $DB_PUBLIC_HOSTNAME"
 
 }

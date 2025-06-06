@@ -8,16 +8,10 @@
 	"authenticationType": {
 		"value": "password"
 	},
-	"enableAAD": {
-		"value": false
-	},
 	"enableDB": {
 		"value": false
 	},
 	"enableCustomDNS": {
-		"value": false
-	},
-	"enableELK": {
 		"value": false
 	},
 	"hasDNSZones": {

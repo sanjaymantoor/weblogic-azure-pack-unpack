@@ -14,16 +14,10 @@
   "dbGlobalTranPro": {
     "value": "OnePhaseCommit"
   },
-  "enableAAD": {
-    "value": false
-  },
   "enableDB": {
     "value": true
   },
   "enableCustomDNS": {
-    "value": false
-  },
-  "enableELK": {
     "value": false
   },
   "hasDNSZones": {

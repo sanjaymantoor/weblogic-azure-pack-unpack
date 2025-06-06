@@ -66,24 +66,23 @@ function create_resource_group()
 function create_postgresql_db_server()
 {
     echo "creating Postgresql DB Server ${DB_SERVER} in resource group ${RG_NAME}"
-    DB_PUBLIC_HOSTNAME=$(az postgres server create \
-                                  --name ${DB_SERVER} \
-                                  --resource-group ${RG_NAME} \
-                                  --location "${LOCATION}" \
-                                  --admin-user ${DB_USERNAME} \
-                                  --admin-password ${DB_PASSWD} \
-                                  --sku-name B_Gen5_1 \
-                                  --ssl-enforcement Disabled \
-                                  --public-network-access Enabled \
-                                  --version 11 \
-                                  --output tsv --query [fullyQualifiedDomainName])
+	az postgres flexible-server create \ 
+							--resource-group ${RG_NAME} \
+						 	--name ${DB_SERVER} \
+						 	--location "${LOCATION}" \
+						 	--version 14 \
+						 	--admin-user ${DB_USERNAME} \
+						 	--admin-password ${DB_PASSWD} \
+						 	 --sku-name Standard_D2s_v3 \
+						 	 --public-access All
 
     if [ "$?" != 0 ];
     then
-     echo "Failure !! Error while creating Postgresql Database Server ${DB_SERVER}"
+     echo "Failure !! Error while creating Postgresql Database Server ${DB_SERVER}" 
      exit 1
     fi
 
+  	DB_PUBLIC_HOSTNAME=$(az postgres flexible-server list --resource-group ${RG_NAME} -o json | grep pgsql12345 | head -1| cut -f2 -d":")
     echo "DB_PUBLIC_HOSTNAME: $DB_PUBLIC_HOSTNAME"
 
 }
@@ -91,13 +90,7 @@ function create_postgresql_db_server()
 function configure_firewall_for_db_server()
 {
     echo "configuring firewall for postgresql db server"
-    RESULT=$(az postgres server firewall-rule create \
-                       --name open_db_ports \
-                       --resource-group ${RG_NAME} \
-                       --server ${DB_SERVER} \
-                       --start-ip-address ${START_IP} \
-                       --end-ip-address ${END_IP} \
-                       --output json)
+    RESULT=$(az postgres flexible-server firewall-rule create --resource-group ${RG_NAME} --name ${DB_SERVER} --rule-name allowip --start-ip-address $START_IP --end-ip-address $END_IP)
 
     if [ "$?" != 0 ];
     then

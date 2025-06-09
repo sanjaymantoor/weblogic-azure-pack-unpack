@@ -226,12 +226,10 @@ function testOffer()
 	echo "Getting adminvm name by querying the deployed resource group"
 	adminVMName=$(az deployment group show -g $resourceGroupName -n mainTemplate |jq '.properties.outputs.adminVMName.value' | sed 's/\"//g')
 	echo "Admin VM is set to $adminVMName"
-	additionalTestParams= "${additionalTestParams} adminVMName=${adminVMName}"
 	echo "additionalTestParams : ${additionalTestParams}"
 	echo "Testing the offer with $testScript"
-	echo "az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} "
-	exit 0
- 	az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} 
+	echo "az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} adminVMName=${adminVMName}"
+ 	az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} adminVMName=${adminVMName}
 	if [[ $? != 0 ]];
 	then
 		echo "Azure test deployment failed"

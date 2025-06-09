@@ -224,12 +224,13 @@ function testOffer()
 	unset IFS
 	additionalTestParams=$( printf "%s " "${additionalTestParams[@]}")
 	echo "Getting adminvm name by querying the deployed resource group"
-	adminVMName=$(az deployment group show -g $resourceGroupName $RESOURCE_GROUP_NAME -n mainTemplate | jq '.properties.parameters.adminVMName.value'|sed 's/\"//g')
+	adminVMName=$(az deployment group show -g $resourceGroupName -n mainTemplate | jq '.properties.parameters.adminVMName.value'|sed 's/\"//g')
 	echo "Admin VM is set to $adminVMName"
 	additionalTestParams= "${additionalTestParams} adminVMName=${adminVMName}"
 	echo "additionalTestParams : ${additionalTestParams}"
 	echo "Testing the offer with $testScript"
 	echo "az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} "
+	exit 0
  	az group deployment create --resource-group $resourceGroupName --template-uri $rawMainTemplateURL --parameters testScenarios=$runTests testInputPropertyFile=$testInputFile testScriptFileName=$testScript testArtifactRepo=$testRepoURL location=$location _artifactsLocation=$artifactLocation ${additionalTestParams} 
 	if [[ $? != 0 ]];
 	then

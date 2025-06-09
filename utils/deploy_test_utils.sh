@@ -224,7 +224,7 @@ function testOffer()
 	unset IFS
 	additionalTestParams=$( printf "%s " "${additionalTestParams[@]}")
 	echo "Getting adminvm name by querying the deployed resource group"
-	adminVMName=$(az deployment group show -g $resourceGroupName $RESOURCE_GROUP_NAME -n MainTemplate | jq '.properties.parameters.adminVMName.value'|sed 's/\"//g'`)
+	adminVMName=$(az deployment group show -g $resourceGroupName $RESOURCE_GROUP_NAME -n MainTemplate | jq '.properties.parameters.adminVMName.value'|sed 's/\"//g')
 	echo "Admin VM is set to $adminVMName"
 	additionalTestParams= "${additionalTestParams} adminVMName=${adminVMName}"
 	echo "additionalTestParams : ${additionalTestParams}"

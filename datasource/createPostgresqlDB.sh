@@ -119,7 +119,9 @@ function export_db_details_as_env_variables()
    sleep 10s
    
    export DB_PUBLIC_HOSTNAME="${DB_PUBLIC_HOSTNAME}"
-   export DB_USERNAME="${DB_USERNAME}@${DB_SERVER}"
+   #export DB_USERNAME="${DB_USERNAME}@${DB_SERVER}"
+   #Flexi server makes use of just DB_USERNAME
+   export DB_USERNAME="${DB_USERNAME}"
    export DB_PASSWD="${DB_PASSWD}"
    export DB_PORT="${DB_PORT}"
    export DB_JDBC_URL="jdbc:postgresql://${DB_PUBLIC_HOSTNAME}:${DB_PORT}/postgres;user=${DB_USERNAME}@${DB_SERVER}"

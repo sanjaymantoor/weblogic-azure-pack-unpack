@@ -115,7 +115,7 @@ function verifyJDBCDriverVersion()
     if [ -z "$managedServers" ];
     then
         print "verifying jdbc driver using admin server"
-        T3_SERVER_URL="t3://adminVM:7001"
+        T3_SERVER_URL="t3://${HOSTNAME}:7001"
         verifyJDBCDriver "${T3_SERVER_URL}" "${DS_JNDI}"
         return
     fi

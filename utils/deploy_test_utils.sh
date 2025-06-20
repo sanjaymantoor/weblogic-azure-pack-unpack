@@ -60,7 +60,7 @@ function cloneTestRepository()
 function hardCodePIDs()
 {
 	gitWorkDirectory=$1
-	cd ${gitWorkDirectory}/weblogic-azure
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack
 	pwd
 	pidKeys=`cat resources/pid.properties | cut -f1 -d"=" | grep -v '#' | grep -v "^$"`
 	for pidKey in $pidKeys
@@ -102,7 +102,7 @@ function createNewGitBranch()
 	skuUrnVersion=$7
 	gitGlobalSettings $gitUserEmail $gitUser
 	cloneTestRepository ${gitRepoURL} ${gitWorkDirectory}
-	cd ${gitWorkDirectory}/weblogic-azure
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack
 	echo "Creating test branch ${testBranchName}"
 	git checkout -b ${testBranchName}
 	git remote add ${testBranchName} ${gitRepoURL}
@@ -110,11 +110,11 @@ function createNewGitBranch()
 	#addTestDeployment $gitWorkDirectory
 	#updateOfferName $gitWorkDirector
 	hardCodePIDs ${gitWorkDirectory}	 
-	cd ${gitWorkDirectory}/weblogic-azure 
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack 
     git commit -a -m "Hardcode pids"
-    echo "git push https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure.git --all"
-    #git push origin ${testBranchName} --repo https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure.git
-    git push https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure.git --all
+    echo "git push https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure-pack-unpack.git --all"
+    #git push origin ${testBranchName} --repo https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure-pack-unpack.git
+    git push https://${gitUser}:${gitToken}@github.com/${gitUser}/weblogic-azure-pack-unpack.git --all
     checkSuccess $? "Pushing changes to git failed"
 }
 
@@ -125,8 +125,8 @@ function deleteGitBranch()
 	gitUser=$2
 	gitToken=$3
 	testBranchName=$4
-	cd $gitWorkDirectory/weblogic-azure
-	git push https://${gitToken}@github.com/${gitUser}/weblogic-azure.git -f --delete ${testBranchName}
+	cd $gitWorkDirectory/weblogic-azure-pack-unpack
+	git push https://${gitToken}@github.com/${gitUser}/weblogic-azure-pack-unpack.git -f --delete ${testBranchName}
 	checkSuccess $? "Delete brach ${testBranchName} failed"
 }
 
@@ -303,19 +303,19 @@ function updateSKU()
 {
 	skuUrnVersion=$1
 	gitWorkDirectory=$2
-	cd ${gitWorkDirectory}/weblogic-azure
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack
 	#templatesList=`grep -rn '"skuUrnVersion": {' | cut -f1 -d":" | sort| uniq`
-	templatesList="weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/mainTemplate.json  
-				   weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/mainTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/mainTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json"
+	templatesList="weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/mainTemplate.json  
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/mainTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/mainTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json"
 	for templateFile in $templatesList
 	do
 		printf "Updating $templateFile for skuUrnVersion\n"
@@ -331,13 +331,13 @@ function addTestDeployment()
 {
  
  	gitWorkDirectory=$1
-	cd ${gitWorkDirectory}/weblogic-azure
-	templatesList="weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json
-				   weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json"
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack
+	templatesList="weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json"
 	for templateFile in $templatesList
 	do
 		printf "Adding deployments section for test offers"
@@ -368,18 +368,18 @@ function addTestDeployment()
 function updateOfferName()
 {
 	gitWorkDirectory=$1
-	cd ${gitWorkDirectory}/weblogic-azure
-		templatesList="weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/mainTemplate.json  
-				   weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/mainTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/mainTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
-				   weblogic-azure-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json"
+	cd ${gitWorkDirectory}/weblogic-azure-pack-unpack
+		templatesList="weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/mainTemplate.json  
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplateForCustomSSL.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-admin/src/main/arm/nestedtemplates/adminTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/mainTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-cluster/arm-oraclelinux-wls-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/mainTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterCustomSSLTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/clusterTemplate.json 
+				   weblogic-azure-pack-unpack-vm/arm-oraclelinux-wls-dynamic-cluster/arm-oraclelinux-wls-dynamic-cluster/src/main/arm/nestedtemplates/coherenceTemplate.json"
 	for templateFile in $templatesList
 	do
 		jq '.variables.const_imageOffer="wls-base-image"' $templateFile > $templateFile.tmp

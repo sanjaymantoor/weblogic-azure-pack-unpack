@@ -277,9 +277,9 @@ domainInfo:
 topology:
    Name: "$wlsDomainName"
    Machine:
-     '$nmHost':
+     '$managedServerHost':
          NodeManager:
-             ListenAddress: "$nmHost"
+             ListenAddress: "$managedServerHost"
              ListenPort: $nmPort
              NMType : ssl
    Cluster:
@@ -290,7 +290,7 @@ topology:
            ListenPort: $wlsManagedPort
            Notes: "$wlsServerName managed server"
            Cluster: "$wlsClusterName"
-           Machine: "$nmHost"
+           Machine: "$managedServerHost"
            ServerStart:
                Arguments: '${SERVER_STARTUP_ARGS}'
 EOF
@@ -347,10 +347,10 @@ connect('$wlsUserName','$wlsPassword','$adminWlstURL')
 edit("$wlsServerName")
 startEdit()
 cd('/')
-cmo.createMachine('$nmHost')
-cd('/Machines/$nmHost/NodeManager/$nmHost')
+cmo.createMachine('$managedServerHost')
+cd('/Machines/$nmHost/NodeManager/$managedServerHost')
 cmo.setListenPort(int($nmPort))
-cmo.setListenAddress('$nmHost')
+cmo.setListenAddress('$managedServerHost')
 cmo.setNMType('ssl')
 save()
 resolve()
@@ -373,9 +373,9 @@ startEdit()
 cd('/')
 cmo.createServer('$wlsServerName')
 cd('/Servers/$wlsServerName')
-cmo.setMachine(getMBean('/Machines/$nmHost'))
+cmo.setMachine(getMBean('/Machines/$managedServerHost'))
 cmo.setCluster(getMBean('/Clusters/$wlsClusterName'))
-cmo.setListenAddress('$nmHost')
+cmo.setListenAddress('$managedServerHost')
 cmo.setListenPort(int($wlsManagedPort))
 cmo.setListenPortEnabled(true)
 
@@ -942,7 +942,7 @@ CURRENT_DATE=`date +%s`
 MIN_CERT_VALIDITY="1"
 
 #read arguments from stdin
-read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost numberOfInstances managedServerHost oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"
@@ -1001,6 +1001,7 @@ if [ $wlsServerName == "admin" ];
 then
   updateNetworkRules "admin"
   create_adminSetup
+  countManagedServer=1
   createStopWebLogicScript
   create_nodemanager_service
   admin_boot_setup
@@ -1011,11 +1012,15 @@ then
   enabledAndStartNodeManagerService
   enableAndStartAdminServerService
   wait_for_admin
+  while [ $countManagedServer -le $numManagedServers ]
+  do
+  		create_managedSetup
+  		countManagedServer=`expr $countManagedServer + 1`
+  done
   configureCustomHostNameVerifier
 else
   wait_for_admin
   updateNetworkRules "managed"
-  create_managedSetup
   generateCustomHostNameVerifier
   copyCustomHostNameVerifierJarsToWebLogicClasspath
   setUMaskForSecurityDir

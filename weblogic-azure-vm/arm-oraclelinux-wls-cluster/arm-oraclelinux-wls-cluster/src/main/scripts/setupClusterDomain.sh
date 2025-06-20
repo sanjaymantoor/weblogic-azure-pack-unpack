@@ -1023,7 +1023,7 @@ else
   enabledAndStartNodeManagerService
   wait_for_admin
   configureCustomHostNameVerifier
-  start_managed
+  #start_managed
 fi
 
-cleanup
+#cleanup

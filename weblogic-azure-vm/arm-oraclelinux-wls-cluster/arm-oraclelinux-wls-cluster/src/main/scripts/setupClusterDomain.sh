@@ -604,7 +604,7 @@ function create_managedSetup(){
     
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $DOMAIN_PATH/weblogic-deploy/bin/createDomain.sh -oracle_home $oracleHome -domain_parent $DOMAIN_PATH  -domain_type WLS -model_file $DOMAIN_PATH/managed-domain.yaml"
+    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $DOMAIN_PATH/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $DOMAIN_PATH/managed-domain.yaml"
     if [[ $? != 0 ]]; then
        echo "Error : Managed setup failed"
        exit 1
@@ -612,7 +612,7 @@ function create_managedSetup(){
     wait_for_admin
     
     # For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
-    getSerializedSystemIniFileFromShare
+    #getSerializedSystemIniFileFromShare
     
     echo "Adding machine to managed server $wlsServerName"
     runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-machine.py"
@@ -944,7 +944,7 @@ MIN_CERT_VALIDITY="1"
 #read arguments from stdin
 read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost numberOfInstances managedServerHost managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
-echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $numberOfInstances $managedServerHost $managedServerPrefix$oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
+echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $numberOfInstances $managedServerHost $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"

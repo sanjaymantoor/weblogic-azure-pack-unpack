@@ -348,7 +348,7 @@ edit("$wlsServerName")
 startEdit()
 cd('/')
 cmo.createMachine('$managedServerHost')
-cd('/Machines/$nmHost/NodeManager/$managedServerHost')
+cd('/Machines/$managedServerHost/NodeManager/$managedServerHost')
 cmo.setListenPort(int($nmPort))
 cmo.setListenAddress('$managedServerHost')
 cmo.setNMType('ssl')
@@ -1015,7 +1015,7 @@ then
   enableAndStartAdminServerService
   wait_for_admin
   configureCustomHostNameVerifier
- while [ $countManagedServer -le $numManagedServers ]
+ while [ $countManagedServer -le $numberOfInstances ]
   do
   		wlsServerName=${managedServerPrefix}${countManagedServer}
   		create_managedSetup

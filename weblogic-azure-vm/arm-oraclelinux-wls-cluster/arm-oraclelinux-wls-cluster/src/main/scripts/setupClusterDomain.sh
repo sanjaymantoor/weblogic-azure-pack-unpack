@@ -1020,6 +1020,7 @@ then
   configureCustomHostNameVerifier
  while [ $countManagedServer -le $numberOfInstances ]
   do
+  		managedServerHost=${managedServerHost}${countManagedServer}
   		wlsServerName=${managedServerPrefix}${countManagedServer}
   		create_managedSetup
   		countManagedServer=`expr $countManagedServer + 1`

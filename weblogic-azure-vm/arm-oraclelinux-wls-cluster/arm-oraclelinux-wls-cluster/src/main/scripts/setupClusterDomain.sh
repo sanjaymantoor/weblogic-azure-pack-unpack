@@ -599,8 +599,8 @@ function create_managedSetup(){
 
     echo "Creating managed server model files"
     create_managed_model
-    create_machine_model
-    create_ms_server_model
+    #create_machine_model
+    #create_ms_server_model
     
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
@@ -612,23 +612,21 @@ function create_managedSetup(){
        exit 1
     fi
     rm -f /tmp/wlscred.txt
-    wait_for_admin
-    
     # For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
     #getSerializedSystemIniFileFromShare
     
-    echo "Adding machine to managed server $wlsServerName"
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-machine.py"
-    if [[ $? != 0 ]]; then
-         echo "Error : Adding machine for managed server $wlsServerName failed"
-         exit 1
-    fi
-    echo "Adding managed server $wlsServerName"
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-server.py"
-    if [[ $? != 0 ]]; then
-         echo "Error : Adding server $wlsServerName failed"
-         exit 1
-    fi
+    #echo "Adding machine to managed server $wlsServerName"
+    #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-machine.py"
+    #if [[ $? != 0 ]]; then
+    #     echo "Error : Adding machine for managed server $wlsServerName failed"
+    #     exit 1
+    #fi
+    #echo "Adding managed server $wlsServerName"
+    #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-server.py"
+    #if [[ $? != 0 ]]; then
+    #     echo "Error : Adding server $wlsServerName failed"
+    #     exit 1
+    #fi
 }
 
 function enabledAndStartNodeManagerService()
@@ -933,6 +931,12 @@ function restartAdminServer()
    echo "Starting WebLogic Admin Server..."
 }
 
+function packDomain()
+{
+	
+	
+}
+
 #main script starts here
 
 CURR_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -945,9 +949,9 @@ CURRENT_DATE=`date +%s`
 MIN_CERT_VALIDITY="1"
 
 #read arguments from stdin
-read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost numberOfInstances managedServerHost managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
-echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $numberOfInstances $managedServerHost $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
+echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"
@@ -1020,12 +1024,16 @@ then
   configureCustomHostNameVerifier
  while [ $countManagedServer -le $numberOfInstances ]
   do
-  		managedServerHost=${managedServerHost}${countManagedServer}
+  		managedServerHost=${managedServerHostPrefix}${countManagedServer}
   		wlsServerName=${managedServerPrefix}${countManagedServer}
+  		echo "Creating managed server ${wlsServerName} at host ${managedServerHost}"
   		create_managedSetup
   		countManagedServer=`expr $countManagedServer + 1`
   done
-
+  echo "Stopping WebLogic Admin Server..."
+  systemctl stop wls_admin
+  sleep 2m
+  
 else
   wait_for_admin
   updateNetworkRules "managed"

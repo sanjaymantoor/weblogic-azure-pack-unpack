@@ -935,7 +935,7 @@ function packDomain()
 {
 	echo "Packing the cluster domain"
 	rm -f  ${mountpointPath}/${wlsDomainName}-template.jar
-	runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
 	if [[ $? != 0 ]]; then
   		echo "Error : Failed to pack the domain $wlsDomainName"
   		exit 1

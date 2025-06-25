@@ -478,6 +478,26 @@ do
 done
 }
 
+#This function to wait for packaged domain availability at ${mountpointPath} by checking ${wlsDomainName}-pack.complete
+function wait_for_packaged_template()
+{
+ #wait for packaged domain template to be available
+ count=1
+ echo "Waiting for packaged domain template availability ${mountpointPath}/${wlsDomainName}-template.jar"
+ while [ ! -f ${mountpointPath}/${wlsDomainName}-pack.complete ] 
+ do 
+ 	echo "."
+ 	count=$((count+1))
+ 	if [ $count -le 30 ];
+ 	then
+ 	  sleep 1m
+ 	else
+ 	  echo "Error : Maximum attempts exceeded for  waiting packaged domain template ${mountpointPath}/${wlsDomainName}-template.jar"
+ 	  exit 1
+  	fi
+ done
+} 
+
 # Create systemctl service for nodemanager
 function create_nodemanager_service()
 {
@@ -933,13 +953,32 @@ function restartAdminServer()
 
 function packDomain()
 {
+	echo "Stopping WebLogic nodemanager ..."
+	sudo systemctl stop wls_nodemanager
+	echo "Stopping WebLogic Admin Server..."
+	sudo systemctl stop wls_admin
+	sleep 2m
 	echo "Packing the cluster domain"
-	rm -f  ${mountpointPath}/${wlsDomainName}-template.jar
 	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
 	if [[ $? != 0 ]]; then
   		echo "Error : Failed to pack the domain $wlsDomainName"
   		exit 1
-	fi	 
+	fi
+	echo "Starting WebLogic nodemanager ..."
+	sudo systemctl start wls_nodemanager
+	echo "Stopping WebLogic Admin Server..."
+	sudo systemctl start wls_admin
+	touch ${mountpointPath}/${wlsDomainName}-pack.complete
+}
+
+function unpackDomain()
+{
+	echo "Unpacking the domain"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/unpack.sh -template=${mountpointPath}/${wlsDomainName}-template.jar -domain=${DOMAIN_PATH}/${wlsDomainName}"
+	if [[ $? != 0 ]]; then
+  		echo "Error : Failed to unpack the domain $wlsDomainName"
+  		exit 1
+	fi
 }
 
 #main script starts here
@@ -1035,22 +1074,18 @@ then
   		create_managedSetup
   		countManagedServer=`expr $countManagedServer + 1`
   done
-  echo "Stopping WebLogic Admin Server..."
-  systemctl stop wls_admin
-  sleep 2m
   packDomain
-  
 else
-  wait_for_admin
+  wait_for_packaged_template
   updateNetworkRules "managed"
+  unpackDomain
   generateCustomHostNameVerifier
   copyCustomHostNameVerifierJarsToWebLogicClasspath
   setUMaskForSecurityDir
   create_nodemanager_service
   enabledAndStartNodeManagerService
-  wait_for_admin
   configureCustomHostNameVerifier
-  #start_managed
+  start_managed
 fi
 
 #cleanup

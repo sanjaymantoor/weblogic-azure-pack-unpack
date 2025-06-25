@@ -1066,11 +1066,11 @@ then
   enableAndStartAdminServerService
   wait_for_admin
   configureCustomHostNameVerifier
-  while [ $countManagedServer -le $numberOfInstances ]
+  while [ $countManagedServer -lt $numberOfInstances ]
   do
   		managedServerHost=${managedServerHostPrefix}${countManagedServer}
   		wlsServerName=${managedServerPrefix}${countManagedServer}
-  		echo "Creating managed server ${wlsServerName} at host ${managedServerHost}"
+  		echo "Configuring managed server ${wlsServerName} for host ${managedServerHost}"
   		create_managedSetup
   		countManagedServer=`expr $countManagedServer + 1`
   done

@@ -802,6 +802,7 @@ function storeCustomSSLCerts()
     else
         echo "Custom SSL is not enabled"
     fi
+    rm -rf 
 }
 
 # Copy SerializedSystemIni.dat file from admin server vm to share point
@@ -1024,7 +1025,7 @@ SERVER_STARTUP_ARGS="-Dlog4j2.formatMsgNoLookups=true"
 wlsAdminURL="$wlsAdminHost:$wlsAdminT3ChannelPort"
 SERVER_START_URL="http://$wlsAdminURL"
 
-KEYSTORE_PATH="${DOMAIN_PATH}/${wlsDomainName}/keystores"
+KEYSTORE_PATH="${DOMAIN_PATH}/keystores"
 
 if [ "${isCustomSSLEnabled}" == "true" ];
 then

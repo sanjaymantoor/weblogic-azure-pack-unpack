@@ -44,6 +44,9 @@ public class WebLogicCustomHostNameVerifier implements weblogic.security.SSL.Hos
         else
         if(commonName.startsWith(hostNameMatchStartString) && commonName.endsWith(hostNameMatchEndString))
         {
+        	debug("matching with hostname start and end string");
+        	debug("hostNameMatchStartString:"+hostNameMatchStartString);
+        	debug("hostNameMatchEndString:"+hostNameMatchEndString);
             return true;
         }
         

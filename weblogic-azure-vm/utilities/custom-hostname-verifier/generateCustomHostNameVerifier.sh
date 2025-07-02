@@ -53,6 +53,8 @@ fi
 
 readArgs "$@"
 
+echo "$@"
+
 echo "initializing ..."
 CLASSES_DIR="$SCRIPT_DIR/classes"
 mkdir -p "$CLASSES_DIR"

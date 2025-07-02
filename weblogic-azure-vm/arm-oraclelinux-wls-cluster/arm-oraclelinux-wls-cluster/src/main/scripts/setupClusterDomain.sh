@@ -896,8 +896,8 @@ function generateCustomHostNameVerifier()
    cp ${BASE_DIR}/WebLogicCustomHostNameVerifierTest.java ${CUSTOM_HOSTNAME_VERIFIER_HOME}/src/test/java/WebLogicCustomHostNameVerifierTest.java
    chown -R $username:$groupname ${CUSTOM_HOSTNAME_VERIFIER_HOME}
    chmod +x ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh
-   echo "${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} true"	
-   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} true"
+   echo "${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${globalResourceNameSuffix} true "	
+   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${globalResourceNameSuffix} true "
 }
 
 function copyCustomHostNameVerifierJarsToWebLogicClasspath()
@@ -967,7 +967,7 @@ function packDomain()
 	fi
 	echo "Starting WebLogic nodemanager ..."
 	sudo systemctl start wls_nodemanager
-	echo "Stopping WebLogic Admin Server..."
+	echo "Starting WebLogic Admin Server..."
 	sudo systemctl start wls_admin
 	touch ${mountpointPath}/${wlsDomainName}-pack.complete
 }
@@ -994,9 +994,9 @@ CURRENT_DATE=`date +%s`
 MIN_CERT_VALIDITY="1"
 
 #read arguments from stdin
-read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost globalResourceNameSuffix numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
-echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
+echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $globalResourceNameSuffix $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"

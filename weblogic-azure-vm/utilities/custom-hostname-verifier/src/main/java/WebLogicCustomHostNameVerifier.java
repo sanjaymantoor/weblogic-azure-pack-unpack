@@ -18,7 +18,8 @@ public class WebLogicCustomHostNameVerifier implements weblogic.security.SSL.Hos
                                             .append(".")
                                             .append(HostNameValues.azureVMExternalDomainName.toLowerCase()).toString();
         
-        String vmNameString = new StringBuilder(HostNameValues.getAdminVMNamePrefix().append(HostNameValues.getGlobalResourceNameSuffix().append("VM")));
+		String vmNameString = new StringBuilder(HostNameValues.getAdminVMNamePrefix())
+										.append(HostNameValues.getGlobalResourceNameSuffix()).append("VM").toString();
         debug("vmNameString:"+vmNameString);
 
         if(commonName.equalsIgnoreCase(urlHostname))
@@ -52,7 +53,7 @@ public class WebLogicCustomHostNameVerifier implements weblogic.security.SSL.Hos
         	debug("hostNameMatchEndString:"+hostNameMatchEndString);
             return true;
         }else
-        if(commonName.startsWith(HostNameValues.getAdminVMNamePrefix) && urlHostname.equalsIgnoreCase(vmNameString))
+        if(commonName.startsWith(HostNameValues.getAdminVMNamePrefix()) && urlHostname.equalsIgnoreCase(vmNameString))
         {
         	debug("matching with vmname");
         	return true;

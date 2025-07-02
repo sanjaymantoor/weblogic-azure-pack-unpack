@@ -47,5 +47,10 @@ public class HostNameValues
     {
       return azureResourceGroupRegion;
     }
+    
+    public static String getGlobalResourceNameSuffix()
+    {
+      return globalResourceNameSuffix;
+    }
 }
 

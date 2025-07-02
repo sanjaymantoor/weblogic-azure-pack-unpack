@@ -50,7 +50,7 @@ public class WebLogicCustomHostNameVerifier implements weblogic.security.SSL.Hos
         	debug("hostNameMatchEndString:"+hostNameMatchEndString);
             return true;
         }else
-        if(nameAdminVM.equalsIgnoreCase(HostNameValues.adminInternalHostName()))
+        if(nameAdminVM.equalsIgnoreCase(HostNameValues.getAdminInternalHostName()))
         {
         	debug("matching with hostname");
         	return true;

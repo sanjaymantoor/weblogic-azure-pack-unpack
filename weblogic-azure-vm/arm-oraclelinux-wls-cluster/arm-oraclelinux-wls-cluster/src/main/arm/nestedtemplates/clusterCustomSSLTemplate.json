@@ -48,6 +48,13 @@
                 "description": "Admin Server hosting VM name."
             }
         },
+        "adminVMNamePrefix": {
+            "defaultValue": "adminVM",
+            "type": "string",
+            "metadata": {
+                "description": "Admin Server hosting VM name."
+            }
+        },
         "authenticationType": {
             "defaultValue": "password",
             "type": "string",
@@ -783,7 +790,7 @@
                     ]
                 },
                 "protectedSettings": {
-                    "commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' <<< \"',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',parameters('_globalResourceNameSuffix'),' ',parameters('numberOfInstances'),' ',variables('const_managedVMPrefix'),' ', parameters('managedServerPrefix'),' ',variables('const_wlsHome'),' ',variables('name_storageAccount'),' ',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('name_storageAccount')), '${azure.apiVersionForStorage}').keys[0].value,' ',variables('const_mountPointPath'),' ',string(parameters('enableHTTPAdminListenPort')),' ',string(parameters('enableCustomSSL')),' ',if(equals(parameters('virtualNetworkNewOrExisting'), 'new'), if(parameters('enableDNSConfiguration'),parameters('customDNSNameForAdminServer'),reference(variables('name_outputAdminHost_with_pub_ip'), '${azure.apiVersionForPublicIPAddresses}').dnsSettings.fqdn), reference(variables('name_outputAdminHost_without_pub_ip')).ipConfigurations[0].properties.privateIPAddress),' ',parameters('dnsLabelPrefix'),' ',parameters('location'),' ', parameters('virtualNetworkNewOrExisting'),' ',reference(resourceId('Microsoft.Network/privateEndpoints/', variables('name_privateSaEndpoint')), '${azure.apiVersionForPrivateEndpoint}').customDnsConfigs[0].ipAddresses[0],' ',base64(parameters('sslCustomIdentityKeyStoreData')),' ',base64(parameters('sslCustomIdentityKeyStorePassPhrase')),' ',base64(parameters('sslCustomIdentityKeyStoreType')),' ',base64(parameters('sslCustomTrustKeyStoreData')),' ',base64(parameters('sslCustomTrustKeyStorePassPhrase')),' ',base64(parameters('sslCustomTrustKeyStoreType')),' ',base64(parameters('sslPrivateKeyAlias')),' ',base64(parameters('sslPrivateKeyPassPhrase')),'\"')]"
+                    "commandToExecute": "[concat('sh',' ',variables('name_scriptFile'),' <<< \"',parameters('wlsDomainName'),' ',parameters('wlsUserName'),' ',parameters('wlsPassword'),' ',if(equals(copyIndex(),0),'admin',concat(parameters('managedServerPrefix'), copyIndex())),' ',parameters('adminVMName'),' ',parameters('adminVMNamePrefix'),' ',parameters('_globalResourceNameSuffix'),' ',parameters('numberOfInstances'),' ',variables('const_managedVMPrefix'),' ', parameters('managedServerPrefix'),' ',variables('const_wlsHome'),' ',variables('name_storageAccount'),' ',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('name_storageAccount')), '${azure.apiVersionForStorage}').keys[0].value,' ',variables('const_mountPointPath'),' ',string(parameters('enableHTTPAdminListenPort')),' ',string(parameters('enableCustomSSL')),' ',if(equals(parameters('virtualNetworkNewOrExisting'), 'new'), if(parameters('enableDNSConfiguration'),parameters('customDNSNameForAdminServer'),reference(variables('name_outputAdminHost_with_pub_ip'), '${azure.apiVersionForPublicIPAddresses}').dnsSettings.fqdn), reference(variables('name_outputAdminHost_without_pub_ip')).ipConfigurations[0].properties.privateIPAddress),' ',parameters('dnsLabelPrefix'),' ',parameters('location'),' ', parameters('virtualNetworkNewOrExisting'),' ',reference(resourceId('Microsoft.Network/privateEndpoints/', variables('name_privateSaEndpoint')), '${azure.apiVersionForPrivateEndpoint}').customDnsConfigs[0].ipAddresses[0],' ',base64(parameters('sslCustomIdentityKeyStoreData')),' ',base64(parameters('sslCustomIdentityKeyStorePassPhrase')),' ',base64(parameters('sslCustomIdentityKeyStoreType')),' ',base64(parameters('sslCustomTrustKeyStoreData')),' ',base64(parameters('sslCustomTrustKeyStorePassPhrase')),' ',base64(parameters('sslCustomTrustKeyStoreType')),' ',base64(parameters('sslPrivateKeyAlias')),' ',base64(parameters('sslPrivateKeyPassPhrase')),'\"')]"
                 }
             }
         },

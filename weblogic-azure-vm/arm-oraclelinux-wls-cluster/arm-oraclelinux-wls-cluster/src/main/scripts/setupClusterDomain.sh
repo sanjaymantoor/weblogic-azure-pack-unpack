@@ -897,7 +897,7 @@ function generateCustomHostNameVerifier()
    chown -R $username:$groupname ${CUSTOM_HOSTNAME_VERIFIER_HOME}
    chmod +x ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh
    echo "${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${globalResourceNameSuffix} true "	
-   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${globalResourceNameSuffix} true "
+   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${adminVMNamePrefix} ${globalResourceNameSuffix} true "
 }
 
 function copyCustomHostNameVerifierJarsToWebLogicClasspath()
@@ -994,9 +994,9 @@ CURRENT_DATE=`date +%s`
 MIN_CERT_VALIDITY="1"
 
 #read arguments from stdin
-read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost globalResourceNameSuffix numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost adminVMNamePrefix globalResourceNameSuffix numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
-echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $globalResourceNameSuffix $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
+echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $adminVMNamePrefix $globalResourceNameSuffix $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"

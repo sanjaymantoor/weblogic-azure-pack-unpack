@@ -731,6 +731,9 @@
                     "adminUsername": {
                         "value": "[parameters('adminUsername')]"
                     },
+                    "adminVMNamePrefix": {
+                    	 "value": "[parameters('adminVMNamePrefix')]"
+                    },
                     "adminVMName": {
                         "value": "[variables('name_adminVM')]"
                     },

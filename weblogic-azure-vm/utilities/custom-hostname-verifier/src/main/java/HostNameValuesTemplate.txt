@@ -12,6 +12,7 @@ public class HostNameValues
     private static String wlsDomainName="";
     private static String azureResourceGroupRegion="";
     private static String globalResourceNameSuffix="";
+    private static String adminVMNamePrefix="";
 
     public static boolean isDebugEnabled()
     {
@@ -51,6 +52,11 @@ public class HostNameValues
     public static String getGlobalResourceNameSuffix()
     {
       return globalResourceNameSuffix;
+    }
+    
+    public static String getAdminVMNamePrefix()
+    {
+      return adminVMNamePrefix;
     }
 }
 

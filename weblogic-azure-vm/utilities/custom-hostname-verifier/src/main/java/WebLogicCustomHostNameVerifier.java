@@ -63,7 +63,7 @@ public class WebLogicCustomHostNameVerifier implements weblogic.security.SSL.Hos
     
     private void debug(String debugStatement)
     {
-       // if(HostNameValues.isDebugEnabled())
+        if(HostNameValues.isDebugEnabled())
             System.out.println(debugStatement);
     }
 }

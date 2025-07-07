@@ -8,11 +8,6 @@
   "adminUsername": {
     "value": "weblogic"
   },
-  "addressPrefixes": {
-    "value": [
-      "172.16.4.0/23"
-    ]
-  },
   "appGatewayCertificateOption": {
     "value": "haveCert"
   },
@@ -78,29 +73,5 @@
   },
   "enableCustomSSL": {
     "value": false
-  },
-  "subnetName": {
-    "value": "wls-subnet"
-  },
-  "subnetPrefix": {
-    "value": "172.16.5.0/28"
-  },
-  "subnetForAppGateway": {
-    "value": "appgateway-subnet"
-  },
-  "subnetPrefixForAppGateway": {
-    "value": "172.16.4.0/24"
-  },
-  "virtualNetworkName": {
-    "value": "wlscluster-vnet-a32dffdd"
-  },
-  "virtualNetworkResourceGroupName": {
-    "value": "sanjaytest-cluster"
-  },
-  "virtualNetworkNewOrExisting": {
-    "value": "new"
-  },
-  "tagsByResource": {
-    "value": {}
   }
 }

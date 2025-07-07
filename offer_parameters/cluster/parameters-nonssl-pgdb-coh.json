@@ -1,0 +1,97 @@
+{
+  "Location": {
+    "value": "eastus"
+  },
+  "adminPasswordOrKey": {
+    "value": "Weblogic5678"
+  },
+  "adminUsername": {
+    "value": "weblogic"
+  },
+  "addressPrefixes": {
+    "value": [
+      "172.16.4.0/23"
+    ]
+  },
+  "authenticationType": {
+    "value": "password"
+  },
+  "enableDB": {
+    "value": true
+  },
+  "denyPublicTrafficForAdminServer": {
+    "value": false
+  },
+  "denyPublicTrafficForManagedServer": {
+    "value": true
+  },
+  "enableAppGateway": {
+    "value": false
+  },
+  "enableCoherence": {
+    "value": true
+  },
+  "enableCoherenceWebLocalStorage": {
+    "value": true
+  },
+  "enableCookieBasedAffinity": {
+    "value": true
+  },
+  "enableDNSConfiguration": {
+    "value": false
+  },
+  "enablePswlessConnection": {
+    "value": false
+  },
+  "hasDNSZones": {
+    "value": false
+  },
+  "numberOfCoherenceCacheInstances": {
+    "value": 1
+  },
+  "numberOfInstances": {
+    "value": 4
+  },
+  "skuUrnVersion": {
+    "value": "owls-141200-jdk21-ol94;Oracle:weblogic-141200-jdk21-ol94:owls-141200-jdk21-ol94;latest"
+  },
+  "vmSize": {
+    "value": "Standard_B1ms"
+  },
+  "vmSizeSelectForCoherence": {
+    "value": "Standard_B1ms"
+  },
+  "wlsPassword": {
+    "value": "Weblogic5678"
+  },
+  "wlsUserName": {
+    "value": "weblogic"
+  },
+  "enableCustomSSL": {
+    "value": false
+  },
+  "subnetName": {
+    "value": "wls-subnet"
+  },
+  "subnetPrefix": {
+    "value": "172.16.5.0/28"
+  },
+  "subnetForAppGateway": {
+    "value": "appgateway-subnet"
+  },
+  "subnetPrefixForAppGateway": {
+    "value": "172.16.4.0/24"
+  },
+  "virtualNetworkName": {
+    "value": "wlscluster-vnet-a32dffdd"
+  },
+  "virtualNetworkResourceGroupName": {
+    "value": "sanjaytest-cluster"
+  },
+  "virtualNetworkNewOrExisting": {
+    "value": "new"
+  },
+  "tagsByResource": {
+    "value": {}
+  }
+}

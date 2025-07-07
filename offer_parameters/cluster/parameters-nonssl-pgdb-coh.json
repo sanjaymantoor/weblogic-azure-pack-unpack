@@ -32,12 +32,6 @@
   "enableDNSConfiguration": {
     "value": false
   },
-  "enablePswlessConnection": {
-    "value": false
-  },
-  "hasDNSZones": {
-    "value": false
-  },
   "numberOfCoherenceCacheInstances": {
     "value": 1
   },

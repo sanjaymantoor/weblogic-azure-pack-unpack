@@ -5,46 +5,31 @@
   "adminUsername": {
     "value": "weblogic"
   },
- "authenticationType": {
+  "authenticationType": {
     "value": "password"
   },
   "enableDB": {
-    "value": true
-  },
-  "denyPublicTrafficForAdminServer": {
     "value": false
-  },
-  "denyPublicTrafficForManagedServer": {
-    "value": true
   },
   "enableAppGateway": {
     "value": false
   },
   "enableCoherence": {
-    "value": true
+    "value": false
   },
   "enableCoherenceWebLocalStorage": {
-    "value": true
-  },
-  "enableCookieBasedAffinity": {
-    "value": true
+    "value": false
   },
   "enableDNSConfiguration": {
     "value": false
   },
-  "numberOfCoherenceCacheInstances": {
-    "value": 1
+  "hasDNSZones": {
+    "value": false
   },
   "numberOfInstances": {
     "value": 4
   },
-  "skuUrnVersion": {
-    "value": "owls-141200-jdk21-ol94;Oracle:weblogic-141200-jdk21-ol94:owls-141200-jdk21-ol94;latest"
-  },
   "vmSize": {
-    "value": "Standard_B1ms"
-  },
-  "vmSizeSelectForCoherence": {
     "value": "Standard_B1ms"
   },
   "wlsPassword": {
@@ -56,7 +41,10 @@
   "enableCustomSSL": {
     "value": false
   },
-  "enablePswlessConnection": {
-    "value": false
-  }  
+  "enableCookieBasedAffinity": {
+    "value": true
+  },
+  "numberOfCoherenceCacheInstances": {
+    "value": 1
+  }
 }

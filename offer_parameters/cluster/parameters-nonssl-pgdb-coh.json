@@ -15,10 +15,10 @@
     "value": false
   },
   "enableCoherence": {
-    "value": false
+    "value": true
   },
   "enableCoherenceWebLocalStorage": {
-    "value": false
+    "value": true
   },
   "enableDNSConfiguration": {
     "value": false

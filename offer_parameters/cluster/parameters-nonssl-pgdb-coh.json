@@ -55,5 +55,8 @@
   },
   "enableCustomSSL": {
     "value": false
-  }
+  },
+  "enablePswlessConnection": {
+    "value": false
+  }  
 }

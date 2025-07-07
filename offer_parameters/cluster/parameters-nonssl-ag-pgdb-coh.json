@@ -1,62 +1,74 @@
 {
-  "adminPasswordOrKey": {
-    "value": "Weblogic5678"
-  },
-  "adminUsername": {
-    "value": "weblogic"
-  },
-  "authenticationType": {
-    "value": "password"
-  },
-  "enableDB": {
-    "value": true
-  },
-  "databaseType": {
-    "value": "postgresql"
-  },
-  "dbGlobalTranPro": {
-    "value": "OnePhaseCommit"
-  },  
-  "denyPublicTrafficForManagedServer": {
-    "value": true
-  },
-  "enableAppGateway": {
-    "value": true
-  },
-  "enableCoherence": {
-    "value": true
-  },
-  "enableCoherenceWebLocalStorage": {
-    "value": true
-  },
-  "enableDNSConfiguration": {
-    "value": false
-  },
-  "hasDNSZones": {
-    "value": false
-  },
-  "jdbcDataSourceName": {
-    "value": "jndi/test"
-  },  
-  "numberOfCoherenceCacheInstances": {
-    "value": 1
-  },
-  "numberOfInstances": {
-    "value": 4
-  },
-  "vmSize": {
-    "value": "Standard_B1ms"
-  },
-  "vmSizeSelectForCoherence": {
-    "value": "Standard_B1ms"
-  },
-  "wlsPassword": {
-    "value": "Weblogic5678"
-  },
-  "wlsUserName": {
-    "value": "weblogic"
-  },
-  "enableCustomSSL": {
-    "value": false
-  }
+	"adminPasswordOrKey": {
+		"value": "Weblogic5678"
+	},
+	"adminUsername": {
+		"value": "weblogic"
+	},
+	"authenticationType": {
+		"value": "password"
+	},
+	"appGatewayCertificateOption": {
+		"value": "haveCert"
+	},
+	"appGatewaySSLBackendCertData": {
+		"value": null
+	},
+	"appGatewaySSLCertData": {
+		"value": null
+	},
+	"appGatewaySSLCertPassword": {
+		"value": null
+	},
+	"enableDB": {
+		"value": true
+	},
+	"databaseType": {
+		"value": "postgresql"
+	},
+	"dbGlobalTranPro": {
+		"value": "OnePhaseCommit"
+	},
+	"denyPublicTrafficForManagedServer": {
+		"value": true
+	},
+	"enableAppGateway": {
+		"value": true
+	},
+	"enableCoherence": {
+		"value": true
+	},
+	"enableCoherenceWebLocalStorage": {
+		"value": true
+	},
+	"enableDNSConfiguration": {
+		"value": false
+	},
+	"hasDNSZones": {
+		"value": false
+	},
+	"jdbcDataSourceName": {
+		"value": "jndi/test"
+	},
+	"numberOfCoherenceCacheInstances": {
+		"value": 1
+	},
+	"numberOfInstances": {
+		"value": 4
+	},
+	"vmSize": {
+		"value": "Standard_B1ms"
+	},
+	"vmSizeSelectForCoherence": {
+		"value": "Standard_B1ms"
+	},
+	"wlsPassword": {
+		"value": "Weblogic5678"
+	},
+	"wlsUserName": {
+		"value": "weblogic"
+	},
+	"enableCustomSSL": {
+		"value": false
+	}
 }

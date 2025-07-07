@@ -1,0 +1,66 @@
+{
+	"location": {
+		"value": "eastus"
+	},
+	"adminPasswordOrKey": {
+		"value": "Weblogic5678"
+	},
+	"adminUsername": {
+		"value": "weblogic"
+	},
+	"authenticationType": {
+		"value": "password"
+	},
+	"adminVMName": {
+		"value": "adminVM"
+	},
+	"denyPublicTrafficForAdminServer": {
+		"value": false
+	},
+	"dnsLabelPrefix": {
+		"value": "wls"
+	},
+	"dbGlobalTranPro": {
+		"value": "OnePhaseCommit"
+	},
+	"enableDB": {
+		"value": false
+	},
+	"enableCustomDNS": {
+		"value": false
+	},
+	"enablePswlessConnection": {
+		"value": false
+	},
+	"hasDNSZones": {
+		"value": false
+	},
+	"vmSize": {
+		"value": "Standard_B1ms"
+	},
+	"enableCustomSSL": {
+		"value": false
+	},
+	"wlsPassword": {
+		"value": "Weblogic5678"
+	},
+	"wlsUserName": {
+		"value": "weblogic"
+	},
+	"subnetName": {
+		"value": "Subnet-1"
+	},
+	"tagsByResource": {
+		"value": {
+		}
+	},
+	"virtualNetworkNewOrExisting": {
+		"value": "new"
+	},
+  	"virtualNetworkName": {
+    	"value": "wlsadmin-vnet0d2edb78"
+  	},
+  	"virtualNetworkResourceGroupName": {
+    	"value": "sanjay-admin-test"
+  	}	
+}

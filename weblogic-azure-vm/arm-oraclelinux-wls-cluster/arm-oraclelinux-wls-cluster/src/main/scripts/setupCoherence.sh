@@ -860,7 +860,7 @@ cleanup
 
 # Executing this function first just to make sure certificate errors are first caught
 storeCustomSSLCerts
-sleep 30m
+exit 0
 
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
     createCoherenceCluster

@@ -585,8 +585,11 @@ function packDomain()
 	echo "Stopping WebLogic Admin Server..."
 	sudo systemctl stop wls_admin
 	sleep 2m
+	echo "Deleting the packdomain template"
+	rm -f ${mountpointPath}/${wlsDomainName}-template.jar
+	rm -f ${mountpointPath}/${wlsDomainName}-pack.complete
 	echo "Packing the cluster domain"
-	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-coherence-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
 	if [[ $? != 0 ]]; then
   		echo "Error : Failed to pack the domain $wlsDomainName"
   		exit 1
@@ -595,7 +598,7 @@ function packDomain()
 	sudo systemctl start wls_nodemanager
 	echo "Starting WebLogic Admin Server..."
 	sudo systemctl start wls_admin
-	touch ${mountpointPath}/${wlsDomainName}-coherence-pack.complete
+	touch ${mountpointPath}/${wlsDomainName}-pack.complete
 }
 
 function unpackDomain()
@@ -854,8 +857,8 @@ addnodeFlag="${addnodeFlag,,}"
 
 if [ ${serverIndex} -eq 0 ]; then
     wlsServerName="admin"
-else
-    wlsServerName="${managedServerPrefix}${serverIndex}"
+#else
+ #   wlsServerName="${managedServerPrefix}${serverIndex}"
 fi
 
 validateInput

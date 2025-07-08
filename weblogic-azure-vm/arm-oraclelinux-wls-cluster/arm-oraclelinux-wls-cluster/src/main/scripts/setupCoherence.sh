@@ -508,11 +508,15 @@ function createManagedSetup() {
     
     echo "Creating managed server model files"
     create_managed_model
-    create_machine_model
-    create_ms_server_model
+    #create_machine_model
+    #create_ms_server_model
+    echo "Completed managed server model files"
+    sudo chown -R $username:$groupname $DOMAIN_PATH
+    echo $wlsPassword > /tmp/wlscred.txt
+    
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $wlsDomainPath
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/createDomain.sh -oracle_home $oracleHome -domain_parent $wlsDomainPath  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml"
+    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -admin_user $wlsUserName -admin_pass_file /tmp/wlscred.txt -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml"
     if [[ $? != 0 ]]; then
         echo "Error : Managed setup failed"
         exit 1
@@ -520,20 +524,20 @@ function createManagedSetup() {
     wait_for_admin
 
     # For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
-    getSerializedSystemIniFileFromShare
+    #getSerializedSystemIniFileFromShare
 
-    echo "Adding machine to managed server $wlsServerName"
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $wlsDomainPath/add-machine.py"
-    if [[ $? != 0 ]]; then
-        echo "Error : Adding machine for managed server $wlsServerName failed"
-        exit 1
-    fi
-    echo "Adding managed server $wlsServerName"
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $wlsDomainPath/add-server.py"
-    if [[ $? != 0 ]]; then
-        echo "Error : Adding server $wlsServerName failed"
-        exit 1
-    fi
+    #echo "Adding machine to managed server $wlsServerName"
+    #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $wlsDomainPath/add-machine.py"
+    #if [[ $? != 0 ]]; then
+        #echo "Error : Adding machine for managed server $wlsServerName failed"
+        #exit 1
+    #fi
+    #echo "Adding managed server $wlsServerName"
+    #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $wlsDomainPath/add-server.py"
+    #if [[ $? != 0 ]]; then
+        #echo "Error : Adding server $wlsServerName failed"
+        #exit 1
+    #fi
 }
 
 function enabledAndStartNodeManagerService() {
@@ -551,6 +555,16 @@ function enabledAndStartNodeManagerService() {
         fi
         sleep 3m
     done
+}
+
+function unpackDomain()
+{
+	echo "Unpacking the domain"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/unpack.sh -template=${mountpointPath}/${wlsDomainName}-template.jar -domain=${DOMAIN_PATH}/${wlsDomainName}"
+	if [[ $? != 0 ]]; then
+  		echo "Error : Failed to unpack the domain $wlsDomainName"
+  		exit 1
+	fi
 }
 
 function cleanup() {
@@ -808,11 +822,12 @@ storeCustomSSLCerts
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
     createCoherenceCluster
     restartManagedServers
+    createManagedSetup
 else
     installUtilities
     mountFileShare
     openManagedServerPorts
-    createManagedSetup
+    unpackDomain
     generateCustomHostNameVerifier
     copyCustomHostNameVerifierJarsToWebLogicClasspath
     createNodeManagerService
@@ -821,4 +836,4 @@ else
     startManagedServer    
 fi
 
-cleanup
+#cleanup

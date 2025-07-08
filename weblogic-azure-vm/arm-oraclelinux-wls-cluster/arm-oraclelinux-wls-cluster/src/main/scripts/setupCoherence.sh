@@ -557,6 +557,26 @@ function enabledAndStartNodeManagerService() {
     done
 }
 
+#This function to wait for packaged domain availability at ${mountpointPath} by checking ${wlsDomainName}-pack.complete
+function wait_for_packaged_template()
+{
+ #wait for packaged domain template to be available
+ count=1
+ echo "Waiting for packaged domain template availability ${mountpointPath}/${wlsDomainName}-template.jar"
+ while [ ! -f ${mountpointPath}/${wlsDomainName}-pack.complete ] 
+ do 
+ 	echo "."
+ 	count=$((count+1))
+ 	if [ $count -le 30 ];
+ 	then
+ 	  sleep 1m
+ 	else
+ 	  echo "Error : Maximum attempts exceeded for  waiting packaged domain template ${mountpointPath}/${wlsDomainName}-template.jar"
+ 	  exit 1
+  	fi
+ done
+} 
+
 function unpackDomain()
 {
 	echo "Unpacking the domain"
@@ -827,6 +847,7 @@ else
     installUtilities
     mountFileShare
     openManagedServerPorts
+    wait_for_packaged_template
     unpackDomain
     generateCustomHostNameVerifier
     copyCustomHostNameVerifierJarsToWebLogicClasspath

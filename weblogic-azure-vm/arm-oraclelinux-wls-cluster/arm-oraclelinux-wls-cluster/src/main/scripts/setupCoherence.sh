@@ -564,7 +564,7 @@ function wait_for_packaged_template()
  #wait for packaged domain template to be available
  count=1
  echo "Waiting for packaged domain template availability ${mountpointPath}/${wlsDomainName}-template.jar"
- while [ ! -f ${mountpointPath}/${wlsDomainName}-pack.complete ] 
+ while [ ! -f ${mountpointPath}/${wlsDomainName}-coherence-pack.complete ] 
  do 
  	echo "."
  	count=$((count+1))
@@ -585,9 +585,8 @@ function packDomain()
 	echo "Stopping WebLogic Admin Server..."
 	sudo systemctl stop wls_admin
 	sleep 2m
-	rm -f ${mountpointPath}/${wlsDomainName}-pack.complete
 	echo "Packing the cluster domain"
-	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-coherence-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
 	if [[ $? != 0 ]]; then
   		echo "Error : Failed to pack the domain $wlsDomainName"
   		exit 1
@@ -596,7 +595,7 @@ function packDomain()
 	sudo systemctl start wls_nodemanager
 	echo "Starting WebLogic Admin Server..."
 	sudo systemctl start wls_admin
-	touch ${mountpointPath}/${wlsDomainName}-pack.complete
+	touch ${mountpointPath}/${wlsDomainName}-coherence-pack.complete
 }
 
 function unpackDomain()
@@ -861,6 +860,7 @@ cleanup
 
 # Executing this function first just to make sure certificate errors are first caught
 storeCustomSSLCerts
+sleep 30m
 
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
     createCoherenceCluster

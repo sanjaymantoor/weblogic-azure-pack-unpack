@@ -49,7 +49,11 @@
             }
         },
         "adminVMNamePrefix": {
-         	 "value": "[parameters('adminVMNamePrefix')]"
+            "defaultValue": "adminVM",
+            "type": "string",
+            "metadata": {
+                "description": "Admin Server hosting VM name."
+            }
         },
         "authenticationType": {
             "type": "string",

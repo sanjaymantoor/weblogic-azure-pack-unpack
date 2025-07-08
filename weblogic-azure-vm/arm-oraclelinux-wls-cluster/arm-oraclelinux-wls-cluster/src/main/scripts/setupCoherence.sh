@@ -822,6 +822,7 @@ then
     isCustomSSLEnabled="false"
 fi
 
+DOMAIN_PATH="/u01/domains"
 wlsAdminT3ChannelPort=7005
 wlsAdminURL="${adminVMName}:${wlsAdminT3ChannelPort}"
 coherenceClusterName="myCoherence"
@@ -863,8 +864,8 @@ storeCustomSSLCerts
 
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
     createCoherenceCluster
-    restartManagedServers
     createManagedSetup
+    restartManagedServers
     packDomain
 else
     installUtilities

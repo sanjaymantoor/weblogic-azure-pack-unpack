@@ -1192,6 +1192,9 @@
                     "adminVMName": {
                         "value": "[variables('name_adminVM')]"
                     },
+                    "adminVMNamePrefix": {
+                    	 "value": "[parameters('adminVMNamePrefix')]"
+                    },
                     "authenticationType": {
                         "value": "[parameters('authenticationType')]"
                     },

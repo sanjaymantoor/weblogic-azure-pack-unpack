@@ -224,9 +224,9 @@ domainInfo:
 topology:
    Name: "$wlsDomainName"
    Machine:
-     '$nmHost':
+     '$managedServerHost':
          NodeManager:
-             ListenAddress: "$nmHost"
+             ListenAddress: "$managedServerHost"
              ListenPort: $nmPort
              NMType : ssl  
    Cluster:
@@ -237,7 +237,7 @@ topology:
            ListenPort: $storageListenPort
            Notes: "$wlsServerName managed server"
            Cluster: "$storageClusterName"
-           Machine: "$nmHost"
+           Machine: "$managedServerHost"
            ServerStart:
                Arguments: '${SERVER_STARTUP_ARGS}'
 EOF
@@ -284,11 +284,11 @@ connect('$wlsUserName','$wlsPassword','t3://$wlsAdminURL')
 edit("$wlsServerName")
 startEdit(60000,60000,'true')
 cd('/')
-cmo.createMachine('$nmHost')
+cmo.createMachine('$managedServerHost')
 Thread.sleep(100)
-cd('/Machines/$nmHost/NodeManager/$nmHost')
+cd('/Machines/$managedServerHost/NodeManager/$managedServerHost')
 cmo.setListenPort(int($nmPort))
-cmo.setListenAddress('$nmHost')
+cmo.setListenAddress('$managedServerHost')
 cmo.setNMType('ssl')
 save()
 resolve()
@@ -311,9 +311,9 @@ cd('/')
 cmo.createServer('$wlsServerName')
 Thread.sleep(100)
 cd('/Servers/$wlsServerName')
-cmo.setMachine(getMBean('/Machines/$nmHost'))
+cmo.setMachine(getMBean('/Machines/$managedServerHost'))
 cmo.setCluster(getMBean('/Clusters/$storageClusterName'))
-cmo.setListenAddress('$nmHost')
+cmo.setListenAddress('$managedServerHost')
 cmo.setListenPort(int($storageListenPort))
 cmo.setListenPortEnabled(true)
 
@@ -450,7 +450,7 @@ function restartManagedServers() {
 connect('$wlsUserName','$wlsPassword','t3://$wlsAdminURL')
 servers=cmo.getServers()
 try:
-    edit("$nmHost")
+    edit("$managedServerHost")
     startEdit(60000,60000,'true')
     for server in servers:
         if (server.getCluster()!=None and server.getCluster().getName()=='${clientClusterName}'):
@@ -465,7 +465,7 @@ except Exception, e:
     dumpStack()
     undo('true',defaultAnswer='y')
     cancelEdit('y')
-    destroyEditSession("$nmHost",force = true)
+    destroyEditSession("$managedServerHost",force = true)
     raise("Set coherence port range failed")
 
 domainRuntime()
@@ -753,7 +753,10 @@ function generateCustomHostNameVerifier()
    chown -R $username:$groupname ${CUSTOM_HOSTNAME_VERIFIER_HOME}
    chmod +x ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh
 
-   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${adminVMName} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location}"
+   #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${adminVMName} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location}"
+   echo "${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${adminVMNamePrefix} ${globalResourceNameSuffix} true "	
+   runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${adminVMName} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${adminVMNamePrefix} ${globalResourceNameSuffix} true"
+
 }
 
 function copyCustomHostNameVerifierJarsToWebLogicClasspath()
@@ -810,9 +813,9 @@ CURRENT_DATE=`date +%s`
 # Supplied certificate to have minimum days validity for the deployment
 MIN_CERT_VALIDITY="1"
 
-read wlsDomainName wlsUserName wlsPassword adminVMName oracleHome wlsDomainPath storageAccountName storageAccountKey mountpointPath enableWebLocalStorage managedServerPrefix serverIndex customDNSNameForAdminServer dnsLabelPrefix location addnodeFlag isCustomSSLEnabled customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword adminVMName adminVMNamePrefix globalResourceNameSuffix numberOfCoherenceCacheInstances managedServerHostPrefix oracleHome wlsDomainPath storageAccountName storageAccountKey mountpointPath enableWebLocalStorage managedServerPrefix serverIndex customDNSNameForAdminServer dnsLabelPrefix location addnodeFlag isCustomSSLEnabled customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
-echo "$wlsDomainName $wlsUserName $wlsPassword $adminVMName $oracleHome $wlsDomainPath $storageAccountName $storageAccountKey $mountpointPath $enableWebLocalStorage $managedServerPrefix $serverIndex $customDNSNameForAdminServer $dnsLabelPrefix $location $addnodeFlag $isCustomSSLEnabled $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase"
+echo "$wlsDomainName $wlsUserName $wlsPassword $adminVMName $adminVMNamePrefix $globalResourceNameSuffix $numberOfCoherenceCacheInstances $managedServerHostPrefix  $oracleHome $wlsDomainPath $storageAccountName $storageAccountKey $mountpointPath $enableWebLocalStorage $managedServerPrefix $serverIndex $customDNSNameForAdminServer $dnsLabelPrefix $location $addnodeFlag $isCustomSSLEnabled $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase"
 
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"
 
@@ -860,13 +863,20 @@ cleanup
 
 # Executing this function first just to make sure certificate errors are first caught
 storeCustomSSLCerts
-exit 0
 
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
-    createCoherenceCluster
-    createManagedSetup
-    restartManagedServers
-    packDomain
+  countManagedServer=1
+  createCoherenceCluster
+  while [ $countManagedServer -lt $numberOfCoherenceCacheInstances ]
+  do
+  		managedServerHost=${managedServerHostPrefix}${countManagedServer}
+  		wlsServerName=${managedServerPrefix}${countManagedServer}
+  		echo "Configuring managed server ${wlsServerName} for host ${managedServerHost}"
+  		createManagedSetup
+  		countManagedServer=`expr $countManagedServer + 1`
+  done
+  restartManagedServers
+  packDomain
 else
     installUtilities
     mountFileShare

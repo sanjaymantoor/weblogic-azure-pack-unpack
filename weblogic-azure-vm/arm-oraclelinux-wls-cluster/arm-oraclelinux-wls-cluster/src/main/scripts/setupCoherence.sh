@@ -516,7 +516,8 @@ function createManagedSetup() {
     
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $wlsDomainPath
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/updateDomain.sh -admin_url $wlsAdminURL -admin_user $wlsUserName -admin_pass_file /tmp/wlscred.txt -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml"
+    adminWlstURL="t3://$wlsAdminURL"
+    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -admin_user $wlsUserName -admin_pass_file /tmp/wlscred.txt -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml"
     if [[ $? != 0 ]]; then
         echo "Error : Managed setup failed"
         exit 1
@@ -576,6 +577,27 @@ function wait_for_packaged_template()
   	fi
  done
 } 
+
+function packDomain()
+{
+	echo "Stopping WebLogic nodemanager ..."
+	sudo systemctl stop wls_nodemanager
+	echo "Stopping WebLogic Admin Server..."
+	sudo systemctl stop wls_admin
+	sleep 2m
+	rm -f ${mountpointPath}/${wlsDomainName}-pack.complete
+	echo "Packing the cluster domain"
+	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
+	if [[ $? != 0 ]]; then
+  		echo "Error : Failed to pack the domain $wlsDomainName"
+  		exit 1
+	fi
+	echo "Starting WebLogic nodemanager ..."
+	sudo systemctl start wls_nodemanager
+	echo "Starting WebLogic Admin Server..."
+	sudo systemctl start wls_admin
+	touch ${mountpointPath}/${wlsDomainName}-pack.complete
+}
 
 function unpackDomain()
 {
@@ -843,6 +865,7 @@ if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
     createCoherenceCluster
     restartManagedServers
     createManagedSetup
+    packDomain
 else
     installUtilities
     mountFileShare

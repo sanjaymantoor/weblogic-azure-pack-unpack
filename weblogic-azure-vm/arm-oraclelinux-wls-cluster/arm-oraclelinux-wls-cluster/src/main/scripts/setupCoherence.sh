@@ -886,6 +886,7 @@ else
     openManagedServerPorts
     wait_for_packaged_template
     unpackDomain
+    wait_for_admin
     generateCustomHostNameVerifier
     copyCustomHostNameVerifierJarsToWebLogicClasspath
     createNodeManagerService

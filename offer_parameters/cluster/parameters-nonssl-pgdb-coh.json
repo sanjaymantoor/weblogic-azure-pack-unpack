@@ -9,7 +9,7 @@
 		"value": "password"
 	},
 	"enableDB": {
-		"value": false
+		"value": true
 	},
 	"enableAppGateway": {
 		"value": false

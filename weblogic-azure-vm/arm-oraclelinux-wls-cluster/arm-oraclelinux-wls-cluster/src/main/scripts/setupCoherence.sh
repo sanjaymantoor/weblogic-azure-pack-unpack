@@ -881,14 +881,13 @@ if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
   packDomain
   restartManagedServers
 else
+	wait_for_packaged_template
     installUtilities
     mountFileShare
     openManagedServerPorts
-    wait_for_packaged_template
     unpackDomain
     generateCustomHostNameVerifier
     copyCustomHostNameVerifierJarsToWebLogicClasspath
-    wait_for_admin
     createNodeManagerService
     enabledAndStartNodeManagerService
     configureCustomHostNameVerifier

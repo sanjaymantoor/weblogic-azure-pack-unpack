@@ -857,8 +857,8 @@ addnodeFlag="${addnodeFlag,,}"
 
 if [ ${serverIndex} -eq 0 ]; then
     wlsServerName="admin"
-#else
- #   wlsServerName="${managedServerPrefix}${serverIndex}"
+else
+    wlsServerName="${managedServerPrefix}${serverIndex}"
 fi
 
 validateInput
@@ -870,7 +870,7 @@ storeCustomSSLCerts
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
   countManagedServer=1
   createCoherenceCluster
-  while [ $countManagedServer -lt $numberOfCoherenceCacheInstances ]
+  while [ $countManagedServer -le $numberOfCoherenceCacheInstances ]
   do
   		managedServerHost=${managedServerHostPrefix}${countManagedServer}
   		wlsServerName=${managedServerPrefix}${countManagedServer}

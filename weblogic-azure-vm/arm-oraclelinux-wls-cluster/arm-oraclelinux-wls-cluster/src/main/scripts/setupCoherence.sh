@@ -890,6 +890,7 @@ else
     copyCustomHostNameVerifierJarsToWebLogicClasspath
     createNodeManagerService
     enabledAndStartNodeManagerService
+    wait_for_admin
     configureCustomHostNameVerifier
     startManagedServer    
 fi

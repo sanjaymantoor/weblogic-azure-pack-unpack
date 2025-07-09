@@ -564,7 +564,7 @@ function wait_for_packaged_template()
  #wait for packaged domain template to be available
  count=1
  echo "Waiting for packaged domain template availability ${mountpointPath}/${wlsDomainName}-template.jar"
- while [ ! -f ${mountpointPath}/${wlsDomainName}-coherence-pack.complete ] 
+ while [ ! -f ${mountpointPath}/${wlsDomainName}-pack.complete ] 
  do 
  	echo "."
  	count=$((count+1))

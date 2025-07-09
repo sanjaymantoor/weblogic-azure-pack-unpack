@@ -522,7 +522,7 @@ function createManagedSetup() {
         echo "Error : Managed setup failed"
         exit 1
     fi
-    wait_for_admin
+    #wait_for_admin
 
     # For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
     #getSerializedSystemIniFileFromShare
@@ -878,17 +878,17 @@ if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
   		createManagedSetup
   		countManagedServer=`expr $countManagedServer + 1`
   done
-  restartManagedServers
   packDomain
+  restartManagedServers
 else
     installUtilities
     mountFileShare
     openManagedServerPorts
     wait_for_packaged_template
     unpackDomain
-    wait_for_admin
     generateCustomHostNameVerifier
     copyCustomHostNameVerifierJarsToWebLogicClasspath
+    wait_for_admin
     createNodeManagerService
     enabledAndStartNodeManagerService
     configureCustomHostNameVerifier

@@ -598,6 +598,7 @@ function packDomain()
 	sudo systemctl start wls_nodemanager
 	echo "Starting WebLogic Admin Server..."
 	sudo systemctl start wls_admin
+	wait_for_admin
 	touch ${mountpointPath}/${wlsDomainName}-pack.complete
 }
 

@@ -847,7 +847,7 @@ storageListenPort=7501
 username="oracle"
 wlsAdminServerName="admin"
 wlsCoherenceArgs="-Dcoherence.localport=$coherenceLocalport -Dcoherence.localport.adjust=$coherenceLocalportAdjust"
-KEYSTORE_PATH="${wlsDomainPath}/${wlsDomainName}/keystores"
+KEYSTORE_PATH="${DOMAIN_PATH}/keystores"
 SERVER_STARTUP_ARGS="-Dlog4j2.formatMsgNoLookups=true"
 
 if [ -z "$addnodeFlag" ];

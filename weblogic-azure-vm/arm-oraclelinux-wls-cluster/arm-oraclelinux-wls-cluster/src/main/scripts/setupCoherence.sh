@@ -581,12 +581,11 @@ function wait_for_packaged_template()
 
 function packDomain()
 {
-	echo "Stopping WebLogic nodemanager ..."
-	sudo systemctl stop wls_nodemanager
-	echo "Stopping WebLogic Admin Server..."
-	sudo systemctl stop wls_admin
-	sleep 2m
-	echo "Deleting the packdomain template"
+#	echo "Stopping WebLogic nodemanager ..."
+#	sudo systemctl stop wls_nodemanager
+#	echo "Stopping WebLogic Admin Server..."
+#	sudo systemctl stop wls_admin
+#	sleep 2m
 	echo "Packing the cluster domain"
 	runuser -l oracle -c "$oracleHome/oracle_common/common/bin/pack.sh -domain=${DOMAIN_PATH}/${wlsDomainName} -template=${mountpointPath}/${wlsDomainName}-template.jar -template_name=\"${wlsDomainName} domain\" -template_desc=\"WebLogic cluster domain\" -managed=true"
 	if [[ $? != 0 ]]; then
@@ -872,6 +871,7 @@ storeCustomSSLCerts
 if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
   countManagedServer=1
   createCoherenceCluster
+  restartManagedServers
   while [ $countManagedServer -le $numberOfCoherenceCacheInstances ]
   do
   		managedServerHost=${managedServerHostPrefix}${countManagedServer}
@@ -881,7 +881,6 @@ if [ "$wlsServerName" == "${wlsAdminServerName}" ]; then
   		countManagedServer=`expr $countManagedServer + 1`
   done
   packDomain
-  restartManagedServers
 else
     installUtilities
     mountFileShare

@@ -518,7 +518,7 @@ function createManagedSetup() {
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $wlsDomainPath
     adminWlstURL="t3://$wlsAdminURL"
-    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -admin_user $wlsUserName -admin_pass_file /tmp/wlscred.txt -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml"
+    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $wlsDomainPath/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -admin_user $wlsUserName -admin_pass_file /tmp/wlscred.txt -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $wlsDomainPath/managed-domain.yaml <<< $wlsPassword"
     if [[ $? != 0 ]]; then
         echo "Error : Managed setup failed"
         exit 1

@@ -510,7 +510,7 @@ function createManagedSetup() {
     echo "Creating managed server model files"
     create_managed_model
     #create_machine_model
-    #create_ms_server_model
+    create_ms_server_model
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
     echo $wlsPassword > /tmp/wlscred.txt

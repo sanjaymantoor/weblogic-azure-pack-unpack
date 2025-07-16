@@ -292,7 +292,7 @@ topology:
            Cluster: "$wlsClusterName"
            Machine: "$managedServerHost"
            ServerStart:
-               Arguments: '${SERVER_STARTUP_ARGS}'
+               Arguments: '${SERVER_STARTUP_ARGS} -Dweblogic.Name=$wlsServerName  -Dweblogic.management.server=${SERVER_START_URL}'
 EOF
     
 if [ "${isCustomSSLEnabled}" == "true" ];

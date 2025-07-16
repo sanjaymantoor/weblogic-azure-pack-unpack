@@ -240,7 +240,7 @@ topology:
            Cluster: "$storageClusterName"
            Machine: "$managedServerHost"
            ServerStart:
-               Arguments: '${SERVER_STARTUP_ARGS}'
+               Arguments: '${SERVER_STARTUP_ARGS}  -Dweblogic.Name=$wlsServerName -Dweblogic.management.server=http://$wlsAdminURL ${wlsCoherenceArgs}'
 EOF
 
         if [ "${isCustomSSLEnabled}" == "true" ];
@@ -333,7 +333,7 @@ set('ServerPrivateKeyPassPhrase', '$serverPrivateKeyPassPhrase')
 cmo.setHostnameVerificationIgnored(true)
 
 cd('/Servers/$wlsServerName/ServerStart/$wlsServerName')
-arguments = '${SERVER_STARTUP_ARGS} -Dweblogic.Name=$wlsServerName -Dweblogic.management.server=http://$wlsAdminURL ${wlsCoherenceArgs}'
+arguments = '${SERVER_STARTUP_ARGS}'
 oldArgs = cmo.getArguments()
 if oldArgs != None:
   newArgs = oldArgs + ' ' + arguments
@@ -510,7 +510,7 @@ function createManagedSetup() {
     echo "Creating managed server model files"
     create_managed_model
     #create_machine_model
-    create_ms_server_model
+    #create_ms_server_model
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
     echo $wlsPassword > /tmp/wlscred.txt

@@ -267,9 +267,9 @@ function testManagedServerStatus()
 function testAppDeployment()
 {
 
-    mkdir -p /tmp/deploy
-    cp ${SHOPPING_CART_APP_PATH} /tmp/deploy/
-    chown -R oracle:oracle /tmp/deploy
+    sudo mkdir -p /tmp/deploy
+    sudo cp ${SHOPPING_CART_APP_PATH} /tmp/deploy/
+    sudo chown -R oracle:oracle /tmp/deploy
 
     startTest
 
@@ -297,7 +297,7 @@ function testAppDeployment()
         echo "SUCCESS: App Deployed Successfully. Deployment Status: ${deploymentStatus}"
         notifyPass
     fi
-    rm -rf /tmp/deploy
+    #rm -rf /tmp/deploy
 
     print "Wait for 15 seconds for the deployed Apps to become available..."
     sleep 15s
@@ -402,9 +402,10 @@ function testAppUnDeployment()
             }" \
             -X POST ${HTTP_ADMIN_URL}/management/weblogic/latest/domainRuntime/deploymentManager/appDeploymentRuntimes/${SHOPPING_CART_APP_NAME}/undeploy)
 
-    print "$retcode"
+    print "Return code :$retcode"
 
     undeploymentStatus="$(echo $retcode | jq -r '.completed')"
+    print "undeploymentStatus: $undeploymentStatus"
 
     if [ "$undeploymentStatus" == "true" ];
     then
@@ -435,7 +436,7 @@ testDeployedAppHTTP
 
 shutdownAllServers
 
-sleep 2m
+sleep 1m
 
 testManagedServerStatus "SHUTDOWN"
 

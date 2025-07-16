@@ -847,7 +847,7 @@ username="oracle"
 wlsAdminServerName="admin"
 wlsCoherenceArgs="-Dcoherence.localport=$coherenceLocalport -Dcoherence.localport.adjust=$coherenceLocalportAdjust"
 KEYSTORE_PATH="${DOMAIN_PATH}/keystores"
-SERVER_STARTUP_ARGS="-Dlog4j2.formatMsgNoLookups=true"
+SERVER_STARTUP_ARGS="-Dlog4j2.formatMsgNoLookups=true -Dweblogic.management.server=http://$wlsAdminURL ${wlsCoherenceArgs}"
 
 if [ -z "$addnodeFlag" ];
 then

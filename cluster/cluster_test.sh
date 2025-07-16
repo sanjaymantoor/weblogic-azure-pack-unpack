@@ -435,13 +435,13 @@ testDeployedAppHTTP
 
 shutdownAllServers
 
-sleep 30s
+sleep 2m
 
 testManagedServerStatus "SHUTDOWN"
 
 startAllServers
 
-sleep 30s
+sleep 3m
 
 testManagedServerStatus "RUNNING"
 

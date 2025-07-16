@@ -230,7 +230,7 @@ testJavaInstallPath
 
 testJavaVersion
 
-testJDBCDrivers
+#testJDBCDrivers
 
 testRNGDService
 

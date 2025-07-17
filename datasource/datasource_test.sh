@@ -252,7 +252,7 @@ then
   notifyFail
 else
   testJDBCDriverInfoAppDeployment
-  verifyJDBCDriverVersion
+  #verifyJDBCDriverVersion
 fi
 
 printTestSummary

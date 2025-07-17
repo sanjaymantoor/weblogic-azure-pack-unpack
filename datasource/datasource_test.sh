@@ -252,6 +252,7 @@ then
   notifyFail
 else
   testJDBCDriverInfoAppDeployment
+  # Commented as Remote JDBC not supported
   #verifyJDBCDriverVersion
 fi
 

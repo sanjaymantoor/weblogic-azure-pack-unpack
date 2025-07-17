@@ -89,7 +89,7 @@ function validateCustomCert()
       notifyFail
    fi
 
-   if [ "$customIdentityKeyStoreFileName" == "/u01/domains/${domainName}/keystores/identity.keystore" ];
+   if [ "$customIdentityKeyStoreFileName" == "/u01/domains/keystores/identity.keystore" ];
    then
       echo "SUCCESS: Custom Identity Keystore Path verified successfully"
       notifyPass
@@ -98,7 +98,7 @@ function validateCustomCert()
       notifyFail
    fi
 
-   if [ "$customTrustKeyStoreFileName" == "/u01/domains/${domainName}/keystores/trust.keystore" ];
+   if [ "$customTrustKeyStoreFileName" == "/u01/domains/keystores/trust.keystore" ];
    then
       echo "SUCCESS: Custom Trust Keystore Path verified successfully"
       notifyPass

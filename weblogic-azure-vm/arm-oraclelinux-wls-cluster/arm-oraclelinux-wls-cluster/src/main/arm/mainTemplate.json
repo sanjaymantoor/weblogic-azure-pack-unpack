@@ -1442,11 +1442,11 @@
         },
         "adminRemoteConsoleURL": {
             "type": "string",
-            "value": "[if(parameters('enableDNSConfiguration'), uri(format('http://{0}.{1}:7001', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminConsole.value)]"
+            "value": "[if(parameters('enableDNSConfiguration'), uri(format('http://{0}.{1}:7001', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleURL.value)]"
         },
         "adminRemoteConsoleSecureURL": {
             "type": "string",
-            "value": "[if(parameters('enableDNSConfiguration'), uri(format('https://{0}.{1}:7002', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminSecuredConsole.value)]"
+            "value": "[if(parameters('enableDNSConfiguration'), uri(format('https://{0}.{1}:7002', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleSecureURL.value)]"
         },
         "appGatewayURL": {
             "type": "string",

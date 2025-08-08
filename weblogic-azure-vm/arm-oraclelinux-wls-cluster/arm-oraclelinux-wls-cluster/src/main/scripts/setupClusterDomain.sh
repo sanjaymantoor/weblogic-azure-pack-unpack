@@ -287,6 +287,7 @@ topology:
              MigrationBasis: 'consensus'
    Server:
         '$wlsServerName' :
+           ListenAddress: "$managedServerHost"
            ListenPort: $wlsManagedPort
            Notes: "$wlsServerName managed server"
            Cluster: "$wlsClusterName"
@@ -347,10 +348,10 @@ connect('$wlsUserName','$wlsPassword','$adminWlstURL')
 edit("$wlsServerName")
 startEdit()
 cd('/')
-cmo.createMachine('$managedServerHost')
-cd('/Machines/$managedServerHost/NodeManager/$managedServerHost')
+cmo.createMachine('$nmHost')
+cd('/Machines/$nmHost/NodeManager/$nmHost')
 cmo.setListenPort(int($nmPort))
-cmo.setListenAddress('$managedServerHost')
+cmo.setListenAddress('$nmHost')
 cmo.setNMType('ssl')
 save()
 resolve()
@@ -373,9 +374,9 @@ startEdit()
 cd('/')
 cmo.createServer('$wlsServerName')
 cd('/Servers/$wlsServerName')
-cmo.setMachine(getMBean('/Machines/$managedServerHost'))
+cmo.setMachine(getMBean('/Machines/$nmHost'))
 cmo.setCluster(getMBean('/Clusters/$wlsClusterName'))
-cmo.setListenAddress('$managedServerHost')
+cmo.setListenAddress('$nmHost')
 cmo.setListenPort(int($wlsManagedPort))
 cmo.setListenPortEnabled(true)
 
@@ -492,7 +493,7 @@ function wait_for_packaged_template()
  	then
  	  sleep 1m
  	else
- 	  echo "Error : Maximum attempts exceeded for  waiting packaged domain template ${mountpointPath}/${wlsDomainName}-template.jar"
+ 	  echo "Error : Maximum attempts exceeded for waiting packaged domain template ${mountpointPath}/${wlsDomainName}-template.jar"
  	  exit 1
   	fi
  done
@@ -619,33 +620,36 @@ function create_managedSetup(){
 
     echo "Creating managed server model files"
     create_managed_model
+    # Following are not requires as it is taken care by create_managed_model applied on existing domain
     #create_machine_model
     #create_ms_server_model
     
     echo "Completed managed server model files"
     sudo chown -R $username:$groupname $DOMAIN_PATH
-    echo $wlsPassword > /tmp/wlscred.txt
+    # Updating managed-domain.yaml using updateDomain.sh on existing domain created by create_admin_model 
+    # wlsPassword is accepted from stdin to support old and new weblogic-deploy tool version
     runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; $DOMAIN_PATH/weblogic-deploy/bin/updateDomain.sh -admin_url $adminWlstURL -admin_user $wlsUserName -oracle_home $oracleHome -domain_home $DOMAIN_PATH/${wlsDomainName}  -domain_type WLS -model_file $DOMAIN_PATH/managed-domain.yaml <<< $wlsPassword"
     if [[ $? != 0 ]]; then
-       rm -f /tmp/wlscred.txt
        echo "Error : Managed setup failed"
        exit 1
     fi
-    rm -f /tmp/wlscred.txt
-    # For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
+	
+	# Following are not required as updateDomain.sh with managed-domain.yaml will take care of following
+    #wait_for_admin
+    ## For issue https://github.com/wls-eng/arm-oraclelinux-wls/issues/89
     #getSerializedSystemIniFileFromShare
     
     #echo "Adding machine to managed server $wlsServerName"
     #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-machine.py"
     #if [[ $? != 0 ]]; then
-    #     echo "Error : Adding machine for managed server $wlsServerName failed"
-    #     exit 1
+         #echo "Error : Adding machine for managed server $wlsServerName failed"
+         #exit 1
     #fi
     #echo "Adding managed server $wlsServerName"
     #runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; java $WLST_ARGS weblogic.WLST $DOMAIN_PATH/add-server.py"
     #if [[ $? != 0 ]]; then
-    #     echo "Error : Adding server $wlsServerName failed"
-    #     exit 1
+         #echo "Error : Adding server $wlsServerName failed"
+         #exit 1
     #fi
 }
 
@@ -802,7 +806,6 @@ function storeCustomSSLCerts()
     else
         echo "Custom SSL is not enabled"
     fi
-    rm -rf 
 }
 
 # Copy SerializedSystemIni.dat file from admin server vm to share point
@@ -896,7 +899,7 @@ function generateCustomHostNameVerifier()
    cp ${BASE_DIR}/WebLogicCustomHostNameVerifierTest.java ${CUSTOM_HOSTNAME_VERIFIER_HOME}/src/test/java/WebLogicCustomHostNameVerifierTest.java
    chown -R $username:$groupname ${CUSTOM_HOSTNAME_VERIFIER_HOME}
    chmod +x ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh
-   echo "${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${adminVMNamePrefix} ${globalResourceNameSuffix} false"	
+
    runuser -l oracle -c ". $oracleHome/oracle_common/common/bin/setWlstEnv.sh; ${CUSTOM_HOSTNAME_VERIFIER_HOME}/generateCustomHostNameVerifier.sh ${wlsAdminHost} ${customDNSNameForAdminServer} ${customDNSNameForAdminServer} ${dnsLabelPrefix} ${wlsDomainName} ${location} ${adminVMNamePrefix} ${globalResourceNameSuffix} false"
 }
 
@@ -994,9 +997,7 @@ CURRENT_DATE=`date +%s`
 MIN_CERT_VALIDITY="1"
 
 #read arguments from stdin
-read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost adminVMNamePrefix globalResourceNameSuffix numberOfInstances managedServerHostPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
-
-echo $wlsDomainName $wlsUserName $wlsPassword $wlsServerName $wlsAdminHost $adminVMNamePrefix $globalResourceNameSuffix $numberOfInstances $managedServerHostPrefix $managedServerPrefix $oracleHome $storageAccountName $storageAccountKey $mountpointPath $isHTTPAdminListenPortEnabled $isCustomSSLEnabled $customDNSNameForAdminServer $dnsLabelPrefix $location $virtualNetworkNewOrExisting $storageAccountPrivateIp $customIdentityKeyStoreData $customIdentityKeyStorePassPhrase $customIdentityKeyStoreType $customTrustKeyStoreData $customTrustKeyStorePassPhrase $customTrustKeyStoreType $serverPrivateKeyAlias $serverPrivateKeyPassPhrase
+read wlsDomainName wlsUserName wlsPassword wlsServerName wlsAdminHost adminVMNamePrefix globalResourceNameSuffix numberOfInstances managedVMPrefix managedServerPrefix oracleHome storageAccountName storageAccountKey mountpointPath isHTTPAdminListenPortEnabled isCustomSSLEnabled customDNSNameForAdminServer dnsLabelPrefix location virtualNetworkNewOrExisting storageAccountPrivateIp customIdentityKeyStoreData customIdentityKeyStorePassPhrase customIdentityKeyStoreType customTrustKeyStoreData customTrustKeyStorePassPhrase customTrustKeyStoreType serverPrivateKeyAlias serverPrivateKeyPassPhrase
 
 isHTTPAdminListenPortEnabled="${isHTTPAdminListenPortEnabled,,}"
 isCustomSSLEnabled="${isCustomSSLEnabled,,}"
@@ -1025,6 +1026,7 @@ SERVER_STARTUP_ARGS="-Dlog4j2.formatMsgNoLookups=true"
 wlsAdminURL="$wlsAdminHost:$wlsAdminT3ChannelPort"
 SERVER_START_URL="http://$wlsAdminURL"
 
+# Unpack requires domain directory to be empty, hence creating outside the domain
 KEYSTORE_PATH="${DOMAIN_PATH}/keystores"
 
 if [ "${isCustomSSLEnabled}" == "true" ];
@@ -1055,7 +1057,6 @@ if [ $wlsServerName == "admin" ];
 then
   updateNetworkRules "admin"
   create_adminSetup
-  countManagedServer=1
   createStopWebLogicScript
   create_nodemanager_service
   admin_boot_setup
@@ -1067,24 +1068,30 @@ then
   enableAndStartAdminServerService
   wait_for_admin
   configureCustomHostNameVerifier
+  # Create managed server configuration counting from 1 to number of instances
+  countManagedServer=1
   while [ $countManagedServer -lt $numberOfInstances ]
   do
-  		managedServerHost=${managedServerHostPrefix}${countManagedServer}
-  		wlsServerName=${managedServerPrefix}${countManagedServer}
-  		echo "Configuring managed server ${wlsServerName} for host ${managedServerHost}"
-  		create_managedSetup
-  		countManagedServer=`expr $countManagedServer + 1`
+    managedServerHost=${managedVMPrefix}${countManagedServer}
+    wlsServerName=${managedServerPrefix}${countManagedServer}
+    echo "Configuring managed server ${wlsServerName} for host ${managedServerHost}"
+    create_managedSetup
+    countManagedServer=`expr $countManagedServer + 1`
   done
+  # After domain is created pack the domain and keep it under mountFileShare location
   packDomain
 else
+  # Wait for admin host pack the domain and place the template under mountFileShare location	
   wait_for_packaged_template
   updateNetworkRules "managed"
+  # unpack the domain from the template under mountFileShare location	
   unpackDomain
   generateCustomHostNameVerifier
   copyCustomHostNameVerifierJarsToWebLogicClasspath
   setUMaskForSecurityDir
   create_nodemanager_service
   enabledAndStartNodeManagerService
+  wait_for_admin
   configureCustomHostNameVerifier
   start_managed
 fi

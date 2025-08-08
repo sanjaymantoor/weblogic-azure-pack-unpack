@@ -52,7 +52,7 @@
             "defaultValue": "adminVM",
             "type": "string",
             "metadata": {
-                "description": "Admin Server hosting VM name."
+                "description": "Admin Server hosting VM name prefix."
             }
         },
         "authenticationType": {

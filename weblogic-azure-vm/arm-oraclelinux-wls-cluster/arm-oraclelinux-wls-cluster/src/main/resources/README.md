@@ -41,7 +41,7 @@ Provisions an n-node Oracle WebLogic Server Cluster
 
 Description
 
-Provisions an n-node Oracle WebLogic Server cluster on Oracle Linux 9 and 8
+Provisions an n-node Oracle WebLogic Server cluster on Oracle Linux 9.1, 8.7 and 7.6
 
 SKU Type
 
@@ -67,7 +67,7 @@ Provisions an n-node Oracle WebLogic Server Cluster
 
 Long Summary
 
-Provisions an n-node Oracle WebLogic Server cluster on Oracle Linux 9 and 8 .
+Provisions an n-node Oracle WebLogic Server cluster on Oracle Linux 9, Oracle Linux 8 and RHEL 8.
 
 Description
 

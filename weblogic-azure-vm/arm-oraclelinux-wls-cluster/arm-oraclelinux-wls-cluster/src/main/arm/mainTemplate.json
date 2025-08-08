@@ -1444,9 +1444,9 @@
             "type": "string",
             "value": "[if(parameters('enableDNSConfiguration'), uri(format('http://{0}.{1}:7001', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleURL.value)]"
         },
-        "adminRemoteConsoleSecureURL": {
+        "adminRemoteConsoleSecuredURL": {
             "type": "string",
-            "value": "[if(parameters('enableDNSConfiguration'), uri(format('https://{0}.{1}:7002', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleSecureURL.value)]"
+            "value": "[if(parameters('enableDNSConfiguration'), uri(format('https://{0}.{1}:7002', parameters('dnszoneAdminConsoleLabel'), parameters('dnszoneName')), ''),reference(variables('clusterTemplateRef'), '${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleSecuredURL.value)]"
         },
         "appGatewayURL": {
             "type": "string",

@@ -861,7 +861,7 @@
       },
       "adminRemoteConsoleSecureURL": {
          "type": "string",
-         "value": "[if(parameters('enableCustomDNS'), uri(format('https://{0}.{1}:7002/console/',parameters('dnszoneAdminConsoleLabel'),parameters('dnszoneName')), ''),reference(variables('name_adminLinkedTemplateDeployment'),'${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleSecureURL.value)]"
+         "value": "[if(parameters('enableCustomDNS'), uri(format('https://{0}.{1}:7002',parameters('dnszoneAdminConsoleLabel'),parameters('dnszoneName')), ''),reference(variables('name_adminLinkedTemplateDeployment'),'${azure.apiVersionForDeployment}').outputs.adminRemoteConsoleSecureURL.value)]"
       },      
       "dnsZoneNameServers": {
          "type": "array",

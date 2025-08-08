@@ -55,8 +55,6 @@ fi
 
 readArgs "$@"
 
-echo "$@"
-
 echo "initializing ..."
 CLASSES_DIR="$SCRIPT_DIR/classes"
 mkdir -p "$CLASSES_DIR"
@@ -89,6 +87,7 @@ sed -i "s/wlsDomainName=.*/wlsDomainName=\"${wlsDomainName}\";/g" $SCRIPT_DIR/sr
 sed -i "s/azureResourceGroupRegion=.*/azureResourceGroupRegion=\"${azureResourceGroupRegion}\";/g" $SCRIPT_DIR/src/main/java/HostNameValues.java
 sed -i "s/globalResourceNameSuffix=.*/globalResourceNameSuffix=\"${globalResourceNameSuffix}\";/g" $SCRIPT_DIR/src/main/java/HostNameValues.java
 sed -i "s/adminVMNamePrefix=.*/adminVMNamePrefix=\"${adminVMNamePrefix}\";/g" $SCRIPT_DIR/src/main/java/HostNameValues.java
+
 
 cd $SCRIPT_DIR/src/main/java
 echo "Compiling modified HostNameValues.java ..."
